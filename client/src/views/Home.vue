@@ -37,15 +37,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
   created() {
-    this.$store.dispatch("SET_ALLQUESTIONS");
+    this.$store.dispatch('SET_ALLQUESTIONS');
   },
   computed: {
-    ...mapState(['questions'])
-  }
+    ...mapState(['questions']),
+  },
 };
 </script>
 
@@ -73,7 +73,7 @@ export default {
   color: #93aac4;
   background-color: #d2e2f4;
   padding: 5px;
-  
+
 }
 
 .rmv {

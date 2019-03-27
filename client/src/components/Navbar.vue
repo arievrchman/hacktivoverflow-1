@@ -39,14 +39,14 @@ export default {
   props: ['isLogin'],
   methods: {
     logout() {
-      let payload = {
+      const payload = {
         status: false,
         userId: null,
-        name: ''
-      }
+        name: '',
+      };
       this.$store.commit('GET_USER', payload);
       localStorage.removeItem('token');
-    }
+    },
   },
 };
 </script>

@@ -35,7 +35,7 @@ export default new Router({
     },
     {
       path: '/tags/:name',
-      name: 'tag'
-    }
+      name: 'tag',
+    },
   ],
 });

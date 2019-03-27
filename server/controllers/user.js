@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const compare = require('../helpers/bcrypt').compare;
+const kue = require('kue');
+const queue = kue.createQueue();
 
 module.exports = {
   async register(req, res) {
@@ -11,6 +13,19 @@ module.exports = {
         password: req.body.password
       };
       let user = await User.create(newUser);
+      let emailJob = queue.create('email', {
+        title: `Welcome to Vuefervlow`,
+        email: user.email,
+        template: `<h1> Welcome ${user.name}, Thanks for Register to our website!</h1><br>
+                   <a href="vueverflow.arievrchman.xyz/users/login">Login here</a>`
+      })
+      emailJob.save(err => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('sending email');
+        }
+      });
       res.status(201).json({
         user,
         message: 'You have successfully registered'
@@ -35,7 +50,7 @@ module.exports = {
             email: user.email,
           };
           let token = jwt.sign(payload, process.env.SECRET);
-          res.json({ token, message: 'You have successfully logged in'});
+          res.json({ token, message: 'You have successfully logged in' });
         } else {
           res.status(404).json({ message: 'Please provide a valid email and password' });
         };

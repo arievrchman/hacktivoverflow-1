@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
-import Sidebar from "@/components/Sidebar.vue";
+import Navbar from '@/components/Navbar.vue';
+import Sidebar from '@/components/Sidebar.vue';
 
 export default {
   components: {
     Navbar,
-    Sidebar
+    Sidebar,
   },
   created() {
     if (localStorage.getItem('token')) {
@@ -28,8 +28,8 @@ export default {
   },
   computed: {
     login() {
-      return this.$store.state.isLogin
-    }
+      return this.$store.state.isLogin;
+    },
   },
 };
 </script>
@@ -37,4 +37,3 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Lato");
 </style>
-

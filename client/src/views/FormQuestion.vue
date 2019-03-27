@@ -26,7 +26,7 @@ export default {
     return {
       title: '',
       description: '',
-      tags: []
+      tags: [],
     };
   },
   methods: {
@@ -37,9 +37,9 @@ export default {
         data: {
           title: this.title,
           tags: this.tags,
-          description: this.description
+          description: this.description,
         },
-        headers: { token: localStorage.getItem('token') }
+        headers: { token: localStorage.getItem('token') },
       })
         .then(({ data }) => {
           this.title = '';
@@ -49,13 +49,13 @@ export default {
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
+    },
   },
 };
 </script>
@@ -71,4 +71,3 @@ input[type="text"] {
 }
 
 </style>
-

@@ -37,19 +37,19 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
     };
   },
   methods: {
     login() {
-      let data = {
+      const data = {
         email: this.email,
-        password: this.password
-      }
+        password: this.password,
+      };
       this.axios({
         method: 'post',
         url: '/users/login',
-        data
+        data,
       })
         .then(({ data }) => {
           this.email = '';
@@ -61,20 +61,20 @@ export default {
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         })
         .catch((err) => {
-          let error = err.response.data.message;
+          const error = err.response.data.message;
           Swal.fire({
             type: 'error',
             title: 'Oops...',
             text: error,
           });
         });
-    }
+    },
   },
-}
+};
 </script>
 
 <style>

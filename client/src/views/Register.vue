@@ -61,15 +61,15 @@ export default {
   },
   methods: {
     register() {
-      let data = {
+      const data = {
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
       };
       this.axios({
         method: 'post',
         url: '/users/register',
-        data
+        data,
       })
         .then(({ data }) => {
           this.name = '';
@@ -79,12 +79,12 @@ export default {
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         })
-        .catch(err => {
-          let error = err.response.data;
-          let arrError = [];
+        .catch((err) => {
+          const error = err.response.data;
+          const arrError = [];
           for (const key in error) {
             arrError.push(error[key]);
           }
@@ -94,8 +94,8 @@ export default {
             text: arrError.join(', '),
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

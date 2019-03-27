@@ -6,7 +6,7 @@ import router from './router';
 import store from './store';
 
 Vue.prototype.axios = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:3000',
 });
 
 Vue.use(wysiwyg, {});

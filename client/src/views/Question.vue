@@ -72,7 +72,7 @@
         :key="index"
         class="d-flex border-bottom"
       >
-  
+
         <div class="question-votes py-3">
           <button @click.prevent="upAnswer(answer)" class="btn btn-light px-3">
             <img src="https://img.icons8.com/ios/16/000000/sort-up.png">
@@ -141,7 +141,7 @@ import InputTag from 'vue-input-tag';
 
 export default {
   components: {
-    InputTag
+    InputTag,
   },
   created() {
   },
@@ -152,7 +152,7 @@ export default {
       description: '',
       answer_desc: '',
       upQ: [],
-      downQ: []
+      downQ: [],
     };
   },
   mounted() {
@@ -162,17 +162,16 @@ export default {
     countAnswer(val) {
       if (!val) {
         return 0;
-      } else {
-        return val.length;
       }
+      return val.length;
     },
     postAnswer() {
-      let isLogin = this.$store.state.isLogin;
+      const { isLogin } = this.$store.state;
       if (!isLogin) {
         Swal.fire({
           type: 'error',
           title: 'Oops...',
-          text: 'You must Login first'
+          text: 'You must Login first',
         });
         this.$router.push('/users/login');
       }
@@ -181,44 +180,43 @@ export default {
         url: '/answers',
         data: {
           description: this.answer_desc,
-          questionId: this.$route.params.id
+          questionId: this.$route.params.id,
         },
-        headers: { token: localStorage.getItem('token') }
+        headers: { token: localStorage.getItem('token') },
       })
-        .then(({ data }) => {          
+        .then(({ data }) => {
           this.answer_desc = '';
           Swal.fire({
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
     updateAnswer(a) {
       this.axios({
         method: 'patch',
-        url: '/answers/' + a._id,
+        url: `/answers/${a._id}`,
         headers: { token: localStorage.getItem('token') },
         data: {
           description: a.description,
-        }
+        },
       })
         .then(({ data }) => {
           Swal.fire({
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         })
         .catch((err) => {
           console.log(err);
         });
-
     },
     deleteAnswer(a) {
       Swal.fire({
@@ -228,29 +226,29 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, delete it!',
       })
-      .then((result) => {
-        if (result.value) {
-          return this.axios({
-            method: 'delete',
-            url: '/answers/' + a._id,
-            headers: { token: localStorage.getItem('token') },
-            data: { questionId: this.$route.params.id }
-          });
-        }
-      })
-      .then(({ data }) => {
-        this.$store.commit('GET_ANSWERS');
-        Swal.fire(
-          'Deleted!',
-          data.message,
-          'success'
-        )
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((result) => {
+          if (result.value) {
+            return this.axios({
+              method: 'delete',
+              url: `/answers/${a._id}`,
+              headers: { token: localStorage.getItem('token') },
+              data: { questionId: this.$route.params.id },
+            });
+          }
+        })
+        .then(({ data }) => {
+          this.$store.commit('GET_ANSWERS');
+          Swal.fire(
+            'Deleted!',
+            data.message,
+            'success',
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     upAnswer(a) {
       if (a.owner === this.currentUser.id) {
@@ -262,8 +260,8 @@ export default {
       } else {
         this.axios({
           method: 'patch',
-          url: '/answers/' + a._id + '/upvotes',
-          headers: { token: localStorage.getItem('token') }
+          url: `/answers/${a._id}/upvotes`,
+          headers: { token: localStorage.getItem('token') },
         })
           .then(({ data }) => {
             this.$store.dispatch('SET_QUESTION', this.$route.params.id);
@@ -283,8 +281,8 @@ export default {
       } else {
         this.axios({
           method: 'patch',
-          url: '/answers/' + a._id + '/downvotes',
-          headers: { token: localStorage.getItem('token') }
+          url: `/answers/${a._id}/downvotes`,
+          headers: { token: localStorage.getItem('token') },
         })
           .then(({ data }) => {
             this.$store.dispatch('SET_QUESTION', this.$route.params.id);
@@ -296,31 +294,31 @@ export default {
     },
 
     updateQuestion(q) {
-      let id = this.$route.params.id;
-      let data = {
+      const { id } = this.$route.params;
+      const data = {
         title: q.title,
         tags: this.tags,
-        description: q.description
-      }
+        description: q.description,
+      };
       this.axios({
         method: 'patch',
-        url: '/questions/' + id,
+        url: `/questions/${id}`,
         headers: { token: localStorage.getItem('token') },
-        data
+        data,
       })
         .then(({ data }) => {
           Swal.fire({
             type: 'success',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
           });
         }).catch((err) => {
           console.log(err);
         });
     },
     deleteQuestion() {
-      let id = this.$route.params.id;
+      const { id } = this.$route.params;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -329,28 +327,28 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, delete it!',
       })
-      .then((result) => {
-        if (result.value) {
-          return this.axios({
-            method: 'delete',
-            url: '/questions/' + id,
-            headers: { token: localStorage.getItem('token') }
-          });
-        }
-      })
-      .then(({ data }) => {
-        this.$router.replace('/');
-        Swal.fire(
-          'Deleted!',
-          data.message,
-          'success'
-        )
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((result) => {
+          if (result.value) {
+            return this.axios({
+              method: 'delete',
+              url: `/questions/${id}`,
+              headers: { token: localStorage.getItem('token') },
+            });
+          }
+        })
+        .then(({ data }) => {
+          this.$router.replace('/');
+          Swal.fire(
+            'Deleted!',
+            data.message,
+            'success',
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     upQuestion() {
       if (this.question.owner === this.currentUser.id) {
@@ -362,8 +360,8 @@ export default {
       } else {
         this.axios({
           method: 'patch',
-          url: '/questions/' + this.$route.params.id + '/upvotes',
-          headers: { token: localStorage.getItem('token') }
+          url: `/questions/${this.$route.params.id}/upvotes`,
+          headers: { token: localStorage.getItem('token') },
         })
           .then(({ data }) => {
             this.upQ = data.upvotes;
@@ -384,8 +382,8 @@ export default {
       } else {
         this.axios({
           method: 'patch',
-          url: '/questions/' + this.$route.params.id + '/downvotes',
-          headers: { token: localStorage.getItem('token') }
+          url: `/questions/${this.$route.params.id}/downvotes`,
+          headers: { token: localStorage.getItem('token') },
         })
           .then(({ data }) => {
             this.upQ = data.upvotes;
@@ -395,7 +393,7 @@ export default {
             console.log(err);
           });
       }
-    }
+    },
   },
   computed: {
     ...mapState(['question', 'currentUser', 'answerOfQuestions']),
@@ -404,16 +402,14 @@ export default {
     },
   },
   watch: {
-    'question.tags': function(val) {
-      let getTags = this.question.tags.map(elm => {
-        return elm.name;
-      });
+    'question.tags': function (val) {
+      const getTags = this.question.tags.map(elm => elm.name);
       this.tags = getTags;
     },
-    'question': function(val) {
+    question(val) {
       this.upQ = val.upvotes;
       this.downQ = val.downvotes;
-    }
+    },
   },
 };
 </script>
