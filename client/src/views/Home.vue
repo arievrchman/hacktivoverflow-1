@@ -14,7 +14,7 @@
         <div class="card-body d-flex">
           <div class="cp mr-3">
             <div class="votes">
-              <h6>0</h6>votes
+              <h6>{{ question.total }}</h6>votes
             </div>
             <div class="answer">
               <h6>{{ question.answer.length }}</h6>answer
@@ -40,7 +40,7 @@
 import { mapState } from "vuex";
 
 export default {
-  mounted() {
+  created() {
     this.$store.dispatch("SET_ALLQUESTIONS");
   },
   computed: {

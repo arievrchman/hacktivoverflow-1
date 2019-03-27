@@ -11,7 +11,7 @@ export default new Vuex.Store({
     isLogin: false,
     currentUser: {},
     questions: [],
-    currentQuestion: {},
+    question: {},
     answerOfQuestions: [],
   },
   mutations: {
@@ -23,12 +23,21 @@ export default new Vuex.Store({
       };
     },
     GET_ALLQUESTIONS(state, payload) {
-      state.questions = payload;
+      let countAll = payload.map(elm => {
+        elm['total'] = elm.upvotes.length - elm.downvotes.length;
+        return elm
+      });
+      state.questions = countAll;
     },
     GET_QUESTION(state, payload) {
-      state.currentQuestion = payload;
+      let down = payload.downvotes.length
+      let up = payload.upvotes.length;
+      state.question = payload;
+      state.question['totalCount'] = up - down;
     },
-    // GET_ANSWER()
+    GET_ANSWERS(state, payload) {
+      state.answerOfQuestions = payload;
+    }
   },
   actions: {
     SET_USER({ commit }) {
@@ -66,8 +75,8 @@ export default new Vuex.Store({
         url: baseUrl + '/questions/' + id
       })
       .then(({ data }) => {
-        console.log(data);
         commit('GET_QUESTION', data);
+        commit('GET_ANSWERS', data.answer);
       })
       .catch((err) => {
         console.log(err);
